@@ -1,0 +1,19 @@
+name: 'Configure pass-culture runners'
+description: 'Hold the initial configuration of pass-culture runners'
+author: 'passCulture'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set variables
+      id: vars
+      shell: bash
+      run: |
+        echo "name=$GITHUB_EVENT_NAME" >> $GITHUB_OUTPUT
+    - name: Log inputs
+      shell: bash
+      if: startsWith(runner.name, 'GitHub Actions') && ${{ steps.vars.outputs.name }} == 'workflow_dispatch'
+      run: |
+        echo "::group::Inputs"
+        echo "${{ toJSON(github.event.inputs) }}"
+        echo "::endgroup::"
